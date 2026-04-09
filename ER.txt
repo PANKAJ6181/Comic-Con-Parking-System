@@ -1,0 +1,87 @@
+title Comic-Con Parking System
+
+vehicle_type [icon: truck, color: Blue] {
+  id int pk
+  name string // Bike, Car, SUV, EV
+}
+
+access_category [icon: user, color: Blue] {
+  id int pk
+  name string // General, VIP, Exhibitor, Staff, Cosplayer
+}
+
+vehicle [icon: car, color: Blue] {
+  id int pk
+  access_category_id int
+  vehicle_number string unique
+  vehicle_type_id int
+  
+}
+
+parking_zone [icon: map, color: Green] {
+  id int pk
+  name string
+  level int
+}
+
+spot_type [icon: tag, color: Green] {
+  id int pk
+  name string // General, VIP, EV Charging, Reserved
+  description string
+}
+
+parking_spot [icon: square, color: Green] {
+  id int pk
+  zone_id int
+  spot_type_id int
+  is_active boolean
+}
+
+pricing_rule [icon: dollar-sign, color: Purple] {
+  id int pk
+  vehicle_type_id int
+  spot_type_id int
+  hourly_rate decimal
+}
+
+parking_ticket [icon: ticket, color: Orange] {
+  id int pk
+  ticket_number string unique
+  issued_at datetime
+  vehicle_id int
+}
+
+parking_session [icon: clock, color: Orange] {
+  id int pk
+  vehicle_id int
+  parking_spot_id int
+  ticket_id int
+  entry_time datetime
+  exit_time datetime
+  status string // ACTIVE, COMPLETED, CANCELLED
+}
+
+payment [icon: credit-card, color: Purple] {
+  id int pk
+  session_id int
+  amount decimal
+  payment_method string
+  payment_status string // PAID, PENDING, FAILED
+  paid_at datetime
+}
+vehicle.vehicle_type_id > vehicle_type.id
+vehicle.access_category_id > access_category.id
+
+parking_spot.zone_id > parking_zone.id
+parking_spot.spot_type_id > spot_type.id
+
+pricing_rule.vehicle_type_id > vehicle_type.id
+pricing_rule.spot_type_id > spot_type.id
+
+parking_ticket.vehicle_id > vehicle.id
+
+parking_session.vehicle_id > vehicle.id
+parking_session.parking_spot_id > parking_spot.id
+parking_session.ticket_id - parking_ticket.id
+
+payment.session_id - parking_session.id
