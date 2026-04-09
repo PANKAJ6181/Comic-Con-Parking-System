@@ -11,7 +11,7 @@ The design supports multiple vehicle types, reserved access categories, and reus
 
 ## ER Diagram
 
-Below is the database design for the parking system:
+Db design:
 
 <img src="ER-Diagram.png" width="900">
 
